@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Timer</title>
+</head>
+<body>
+    <div id="inputSection">
+      시간: <Input type="number" id="hours" min="0" max="23">
+      분: <Input type="number" id="minutes" min="0" max="59">
+      초: <Input type="number" id="seconds" min="0" max="59">
+      <button onclick="startCountdown()">START</button>
+    </div>
+
+    <div id="timerSection" style="display: none;">
+      <h1 id="countdown">00:00:00</h1>
+      <button onclick="stopCountdown()">STOP</button>
+      <button onclick="resetCountdown()">RESET</button>
+    </div>
+
+  <script>
+    let intervalId;
+    let timeRemaining;
+
+    function startCountdown() {
+      const hours = parseInt(document.getElementById("hours").value);
+      const minutes = parseInt(document.getElementById("minutes").value);
+      const seconds = parseInt(document.getElementById("seconds").value);
+
+      timeRemaining = (hours * 3600) + (minutes * 60) + seconds;
+
+      if(timeRemaining > 0) {
+        document.getElementById("inputSection").style.display = "none";
+        document.getElementById("timerSection").style.display = "block";
+
+        intervalId = setInterval(() => {
+          if(timeRemaining <= 0) {
+            clearInterval(intervalId);
+          } else {
+            timeRemaining--;
+            displayTime();
+          }
+        }, 1000);
+      }
+    }
+
+    function stopCountdown() {
+      clearInterval(intervalId);
+    }
+
+    function resetCountdown() {
+      clearInterval(intervalId);
+      timeRemaining = 0;
+      displayTime();
+      document.getElementById("timerSection").style.display = "none";
+      document.getElementById("inputSection").style.display = "block";
+    }
+
+    function displayTime() {
+      const h = Math.floor(timeRemaining / 3600);
+      const m = Math.floor((timeRemaining % 3600) / 60);
+      const s = timeRemaining % 60;
+
+      document.getElementById("countdown").textContent =
+        String(h).padStart(2, '0') + ":" +
+        String(m).padStart(2, '0') + ":" +
+        String(s).padStart(2, '0');
+    }
+
+  </script>
+</body>
+</html>
